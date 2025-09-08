@@ -7,11 +7,13 @@ app = Flask(__name__)
 
 @app.route('/track')
 def track():
-    # Log open event
+    # Capture details
     user_ip = request.remote_addr
+    email_id = request.args.get("id", "unknown")   # ?id=user001
     timestamp = datetime.datetime.now()
-    with open("open_logs.txt", "a") as f:
-        f.write(f"Email opened at {timestamp} from IP {user_ip}\n")
+
+    # Log to Railway console
+    print(f"[OPENED] Email ID={email_id}, IP={user_ip}, Time={timestamp}")
 
     # Create 1x1 white pixel dynamically
     img = Image.new("RGB", (1, 1), (255, 255, 255))
@@ -23,9 +25,7 @@ def track():
 
 @app.route('/')
 def home():
-    return "Email Tracker is running!"
+    return "✅ Email Tracker is running on Railway!"
 
 if __name__ == '__main__':
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080)
-
+    app.run(host="0.0.0.0", port=5000)
