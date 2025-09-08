@@ -5,13 +5,17 @@ app = Flask(__name__)
 
 @app.route('/track')
 def track():
+    email_id = request.args.get("id", "unknown")
     user_ip = request.remote_addr
     timestamp = datetime.datetime.now()
+
+    log_line = f"Email {email_id} opened at {timestamp} from IP {user_ip}\n"
+    print(log_line)  # live logs in Railway
     with open("open_logs.txt", "a") as f:
-        f.write(f"Email opened at {timestamp} from IP {user_ip}\n")
+        f.write(log_line)
 
-    # return 1x1 JPG instead of PNG
-    return send_file("pixel.jpg", mimetype='image/jpeg')
+    return send_file("pixel.jpg", mimetype="image/jpeg")
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+@app.route('/')
+def home():
+    return "✅ Email tracker is running!"
